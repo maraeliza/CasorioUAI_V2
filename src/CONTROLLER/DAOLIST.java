@@ -258,16 +258,19 @@ public class DAOLIST {
         Object[] despesaDados = {"1", "Comidas", "Bolo, janta, etc.", "1800.0", "2", "31/11/2024", ""};
         this.cadastrar(12, despesaDados);
         LocalDate data = Util.stringToDate("15/12/2024");
-        this.getDespesas().get(0).agendar(data, true);
+
+        Despesa despesa = (Despesa) this.getDespesas().get(0);
+        despesa.agendar(data, true);
 
         Object[] despesaDados1 = {"1", "Bebidas", "Sucos, refris, etc.", "100.0", "1", "31/11/2024", ""};
         this.cadastrar(12, despesaDados1);
-        this.getDespesas().get(1).agendar(this.dataHoje, true);
+        despesa = (Despesa) this.getDespesas().get(1);
+        despesa.agendar(this.dataHoje, true);
 
         Object[] despesaDados2 = {"3", "Album", "Fotos, fotográfo, etc.", "2500.0", "2", "15/12/2024", ""};
         this.cadastrar(12, despesaDados2);
-        this.getDespesas().get(2).agendar(this.dataHoje, true);
-
+        despesa = (Despesa) this.getDespesas().get(2);
+        despesa.agendar(this.dataHoje, true);
         Object[] despesaDados3 = {"2", "Decoração", "Flores, adornos, etc.", "300.0", "1", "10/11/2024", ""};
         this.cadastrar(12, despesaDados3);
 
@@ -278,67 +281,57 @@ public class DAOLIST {
         int c = 0;
         /*------------------------    DESPESAS AGENDADAS ---------------------------------- */
         List<Object> vDespesa =  this.todosOsVetores.get(12);
-        Despesa vDespesaAgendadas[] = new Despesa[100];
-
-        for (int i = 0; i < vDespesa.length; i++) {
-            if (vDespesa[i] != null) {
-                if (vDespesa[i].isAgendado() && !vDespesa[i].isPago()) {
-                    for (int n = 0; n < vDespesaAgendadas.length; n++) {
-                        if (vDespesaAgendadas[n] == null) {
-                            vDespesaAgendadas[n] = vDespesa[i];
-                            break;
-                        }
-                    }
+        List<Object> vDespesaAgendadas = new ArrayList<>();
+        
+        for (Object elem : vDespesa) {
+            Despesa desp = (Despesa) elem;
+            if(desp != null){
+                if (desp.isAgendado() && !desp.isPago()) {
+                    vDespesaAgendadas.add(desp);
                     c++;
                 }
-
             }
         }
+
+       
         this.setDespesasAgendadas(vDespesaAgendadas);
-
         /*------------------------    PARCELAS AGENDADAS ---------------------------------- */
-        Parcela vParcela[] = (Parcela[]) this.todosOsVetores.get(13);
-        Parcela vParcelaAgendadas[] = new Parcela[100];
-        /* percorre todas as parcelas cadastradas */
-        for (int i = 0; i < vParcela.length; i++) {
-            if (vParcela[i] != null) {
-                /* checa se está agendada */
-                if (vParcela[i].isAgendado() && !vParcela[i].isPago()) {
-                    for (int n = 0; n < vParcelaAgendadas.length; n++) {
-                        if (vParcelaAgendadas[n] == null) {
-                            vParcelaAgendadas[n] = vParcela[i];
-                            break;
-                        }
-                    }
+        List<Object> vParcela =  this.todosOsVetores.get(13);
+        List<Object> vParcelaAgendadas = new ArrayList<>();
+        
+        for (Object elem : vParcela) {
+            Parcela desp = (Parcela) elem;
+            if(desp != null){
+                if (desp.isAgendado() && !desp.isPago()) {
+                    vParcelaAgendadas.add(desp);
                     c++;
                 }
-
             }
         }
+        
         /* salva no vetor */
         this.setParcelaAgendadas(vParcelaAgendadas);
     }
 
     public void pagarAgendados() {
         this.getAgendados();
-        for (int n = 0; n < this.getDespesasAgendadas().length; n++) {
-            Despesa despesa = this.getDespesasAgendadas().get(n);
+        for (Object elem :  this.getDespesasAgendadas()) {
+            Despesa despesa = (Despesa) elem;
             if (despesa != null && despesa.isAgendado()
-                    && (despesa.getDataAgendamento().isBefore(this.dataHoje)
-                    || despesa.getDataAgendamento().isEqual(this.dataHoje))) {
+            && (despesa.getDataAgendamento().isBefore(this.dataHoje)
+            || despesa.getDataAgendamento().isEqual(this.dataHoje))) {
                 despesa.pagar(true);
             }
         }
-        // Percorre o vetor de parcelas agendadas e verifica se alguma parcela tem uma data anterior ou igual ao dia de hoje
-        for (int n = 0; n < this.getParcelaAgendadas().length; n++) {
-            Parcela parcela = this.getParcelaAgendadas().get(n);
+        for (Object elem :  this.getParcelaAgendadas()) {
+            Parcela parcela = (Parcela) elem;
             if (parcela != null && parcela.isAgendado()
-                    && (parcela.getDataAgendamento().isBefore(this.dataHoje)
-                    || parcela.getDataAgendamento().isEqual(this.dataHoje))) {
-                parcela.pagar(false);
-            }
+            && (parcela.getDataAgendamento().isBefore(this.dataHoje)
+            || parcela.getDataAgendamento().isEqual(this.dataHoje))) {
+                parcela.pagar(true);
+             }
         }
-
+       
     }
 
     public int getTotalClasse(int idClasse) {
@@ -382,14 +375,13 @@ public class DAOLIST {
 
         String texto = "PARCELAS CADASTRADAS";
         int c = 0;
-        Parcela[] vP = (Parcela[]) this.getVetorById(13);
-        for (int i = 0; i < vP.length; i++) {
-            if (vP[i] != null) {
-                texto += vP[i].lerParcelaAgendada();
-                c++;
 
-            }
+        for (Object elem : this.todosOsVetores.get(13)) {
+            Parcela p = (Parcela) elem;
+            texto += p.lerParcelaAgendada();
+            c++;
         }
+
         if (c > 1) {
             texto += "\n\nTotal: " + c + " itens\n";
         } else if (c == 1) {
