@@ -34,24 +34,24 @@ import javax.swing.JOptionPane;
  */
 public class DAOLIST {
 
-    private List<Recado> recados;
-    private List<Presente> presentes;
-    private List<Pessoa> pessoas;
-    private List<Usuario> usuarios;
-    private List<Fornecedor> fornecedores;
-    private List<Evento> eventos;
-    private List<Cerimonial> cerimoniais;
-    private List<Igreja> igrejas;
-    private List<Cartorio> cartorios;
-    private List<ConvidadoIndividual> convidadosIndividuais;
-    private List<ConvidadoFamilia> convidadosFamilia;
-    private List<Pagamento> pagamentos;
-    private List<Relatorio> relatorios;
-    private List<Parcela> parcelas;
-    private List<Despesa> despesas;
-    private List<Despesa> despesasAgendadas;
+    private List<Object> recados;
+    private List<Object> presentes;
+    private List<Object> pessoas;
+    private List<Object> usuarios;
+    private List<Object> fornecedores;
+    private List<Object> eventos;
+    private List<Object> cerimoniais;
+    private List<Object> igrejas;
+    private List<Object> cartorios;
+    private List<Object> convidadosIndividuais;
+    private List<Object> convidadosFamilia;
+    private List<Object> pagamentos;
+    private List<Object> relatorios;
+    private List<Object> parcelas;
+    private List<Object> despesas;
+    private List<Object> despesasAgendadas;
 
-    private List<Parcela> parcelaAgendadas;
+    private List<Object> parcelaAgendadas;
     private List<List<Object>> todosOsVetores;
     private List<Class<?>> listaClasses;
     private List<String> listaNomesClasses;
@@ -258,15 +258,15 @@ public class DAOLIST {
         Object[] despesaDados = {"1", "Comidas", "Bolo, janta, etc.", "1800.0", "2", "31/11/2024", ""};
         this.cadastrar(12, despesaDados);
         LocalDate data = Util.stringToDate("15/12/2024");
-        this.getDespesas()[0].agendar(data, true);
+        this.getDespesas().get(0).agendar(data, true);
 
         Object[] despesaDados1 = {"1", "Bebidas", "Sucos, refris, etc.", "100.0", "1", "31/11/2024", ""};
         this.cadastrar(12, despesaDados1);
-        this.getDespesas()[1].agendar(this.dataHoje, true);
+        this.getDespesas().get(1).agendar(this.dataHoje, true);
 
         Object[] despesaDados2 = {"3", "Album", "Fotos, fotográfo, etc.", "2500.0", "2", "15/12/2024", ""};
         this.cadastrar(12, despesaDados2);
-        this.getDespesas()[2].agendar(this.dataHoje, true);
+        this.getDespesas().get(2).agendar(this.dataHoje, true);
 
         Object[] despesaDados3 = {"2", "Decoração", "Flores, adornos, etc.", "300.0", "1", "10/11/2024", ""};
         this.cadastrar(12, despesaDados3);
@@ -277,7 +277,7 @@ public class DAOLIST {
     public void getAgendados() {
         int c = 0;
         /*------------------------    DESPESAS AGENDADAS ---------------------------------- */
-        Despesa vDespesa[] = (Despesa[]) this.todosOsVetores.get(12);
+        List<Object> vDespesa =  this.todosOsVetores.get(12);
         Despesa vDespesaAgendadas[] = new Despesa[100];
 
         for (int i = 0; i < vDespesa.length; i++) {
@@ -322,7 +322,7 @@ public class DAOLIST {
     public void pagarAgendados() {
         this.getAgendados();
         for (int n = 0; n < this.getDespesasAgendadas().length; n++) {
-            Despesa despesa = this.getDespesasAgendadas()[n];
+            Despesa despesa = this.getDespesasAgendadas().get(n);
             if (despesa != null && despesa.isAgendado()
                     && (despesa.getDataAgendamento().isBefore(this.dataHoje)
                     || despesa.getDataAgendamento().isEqual(this.dataHoje))) {
@@ -331,7 +331,7 @@ public class DAOLIST {
         }
         // Percorre o vetor de parcelas agendadas e verifica se alguma parcela tem uma data anterior ou igual ao dia de hoje
         for (int n = 0; n < this.getParcelaAgendadas().length; n++) {
-            Parcela parcela = this.getParcelaAgendadas()[n];
+            Parcela parcela = this.getParcelaAgendadas().get(n);
             if (parcela != null && parcela.isAgendado()
                     && (parcela.getDataAgendamento().isBefore(this.dataHoje)
                     || parcela.getDataAgendamento().isEqual(this.dataHoje))) {
@@ -344,10 +344,10 @@ public class DAOLIST {
     public int getTotalClasse(int idClasse) {
         int n = 0;
 
-        for (int i = 0; i < this.getVetorById(idClasse).length; i++) {
-            if (this.getVetorById(idClasse)[i] != null) {
+        for (Object elem : this.todosOsVetores.get(idClasse)) {
+            if(elem != null){
                 n++;
-            }
+            }    
         }
 
         return n;
@@ -1145,139 +1145,139 @@ public class DAOLIST {
         this.userLogado = userLogado;
     }
 
-    public List<Recado> getRecados() {
+    public List<Object> getRecados() {
         return recados;
     }
 
-    public void setRecados(List<Recado> recados) {
+    public void setRecados(List<Object> recados) {
         this.recados = recados;
     }
 
-    public List<Presente> getPresentes() {
+    public List<Object> getPresentes() {
         return presentes;
     }
 
-    public void setPresentes(List<Presente> presentes) {
+    public void setPresentes(List<Object> presentes) {
         this.presentes = presentes;
     }
 
-    public List<Pessoa> getPessoas() {
+    public List<Object> getPessoas() {
         return pessoas;
     }
 
-    public void setPessoas(List<Pessoa> pessoas) {
+    public void setPessoas(List<Object> pessoas) {
         this.pessoas = pessoas;
     }
 
-    public List<Usuario> getUsuarios() {
+    public List<Object> getUsuarios() {
         return usuarios;
     }
 
-    public void setUsuarios(List<Usuario> usuarios) {
+    public void setUsuarios(List<Object> usuarios) {
         this.usuarios = usuarios;
     }
 
-    public List<Fornecedor> getFornecedores() {
+    public List<Object> getFornecedores() {
         return fornecedores;
     }
 
-    public void setFornecedores(List<Fornecedor> fornecedores) {
+    public void setFornecedores(List<Object> fornecedores) {
         this.fornecedores = fornecedores;
     }
 
-    public List<Evento> getEventos() {
+    public List<Object> getEventos() {
         return eventos;
     }
 
-    public void setEventos(List<Evento> eventos) {
+    public void setEventos(List<Object> eventos) {
         this.eventos = eventos;
     }
 
-    public List<Cerimonial> getCerimoniais() {
+    public List<Object> getCerimoniais() {
         return cerimoniais;
     }
 
-    public void setCerimoniais(List<Cerimonial> cerimoniais) {
+    public void setCerimoniais(List<Object> cerimoniais) {
         this.cerimoniais = cerimoniais;
     }
 
-    public List<Igreja> getIgrejas() {
+    public List<Object> getIgrejas() {
         return igrejas;
     }
 
-    public void setIgrejas(List<Igreja> igrejas) {
+    public void setIgrejas(List<Object> igrejas) {
         this.igrejas = igrejas;
     }
 
-    public List<Cartorio> getCartorios() {
+    public List<Object> getCartorios() {
         return cartorios;
     }
 
-    public void setCartorios(List<Cartorio> cartorios) {
+    public void setCartorios(List<Object> cartorios) {
         this.cartorios = cartorios;
     }
 
-    public List<ConvidadoIndividual> getConvidadosIndividuais() {
+    public List<Object> getConvidadosIndividuais() {
         return convidadosIndividuais;
     }
 
-    public void setConvidadosIndividuais(List<ConvidadoIndividual> convidadosIndividuais) {
+    public void setConvidadosIndividuais(List<Object> convidadosIndividuais) {
         this.convidadosIndividuais = convidadosIndividuais;
     }
 
-    public List<ConvidadoFamilia> getConvidadosFamilia() {
+    public List<Object> getConvidadosFamilia() {
         return convidadosFamilia;
     }
 
-    public void setConvidadosFamilia(List<ConvidadoFamilia> convidadosFamilia) {
+    public void setConvidadosFamilia(List<Object> convidadosFamilia) {
         this.convidadosFamilia = convidadosFamilia;
     }
 
-    public List<Pagamento> getPagamentos() {
+    public List<Object> getPagamentos() {
         return pagamentos;
     }
 
-    public void setPagamentos(List<Pagamento> pagamentos) {
+    public void setPagamentos(List<Object> pagamentos) {
         this.pagamentos = pagamentos;
     }
 
-    public List<Relatorio> getRelatorios() {
+    public List<Object> getRelatorios() {
         return relatorios;
     }
 
-    public void setRelatorios(List<Relatorio> relatorios) {
+    public void setRelatorios(List<Object> relatorios) {
         this.relatorios = relatorios;
     }
 
-    public List<Parcela> getParcelas() {
+    public List<Object> getParcelas() {
         return parcelas;
     }
 
-    public void setParcelas(List<Parcela> parcelas) {
+    public void setParcelas(List<Object> parcelas) {
         this.parcelas = parcelas;
     }
 
-    public List<Despesa> getDespesas() {
+    public List<Object> getDespesas() {
         return despesas;
     }
 
-    public void setDespesas(List<Despesa> despesas) {
+    public void setDespesas(List<Object> despesas) {
         this.despesas = despesas;
     }
 
-    public List<Despesa> getDespesasAgendadas() {
+    public List<Object> getDespesasAgendadas() {
         return despesasAgendadas;
     }
 
-    public void setDespesasAgendadas(List<Despesa> despesasAgendadas) {
+    public void setDespesasAgendadas(List<Object> despesasAgendadas) {
         this.despesasAgendadas = despesasAgendadas;
     }
 
-    public List<Parcela> getParcelaAgendadas() {
+    public List<Object> getParcelaAgendadas() {
         return parcelaAgendadas;
     }
 
-    public void setParcelaAgendadas(List<Parcela> parcelaAgendadas) {
+    public void setParcelaAgendadas(List<Object> parcelaAgendadas) {
         this.parcelaAgendadas = parcelaAgendadas;
     }
 
@@ -1304,5 +1304,8 @@ public class DAOLIST {
     public void setListaNomesClasses(List<String> listaNomesClasses) {
         this.listaNomesClasses = listaNomesClasses;
     }
+    
+    
+    
     
 }
